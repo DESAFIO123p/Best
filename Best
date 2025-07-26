@@ -1,0 +1,429 @@
+-- Carregar Fluent UI e Addons
+local Fluent = loadstring(game:HttpGet("https://github.com/dawid-scripts/Fluent/releases/latest/download/main.lua"))()
+local SaveManager = loadstring(game:HttpGet("https://raw.githubusercontent.com/dawid-scripts/Fluent/master/Addons/SaveManager.lua"))()
+local InterfaceManager = loadstring(game:HttpGet("https://raw.githubusercontent.com/dawid-scripts/Fluent/master/Addons/InterfaceManager.lua"))()
+
+-- Criar janela do Hub
+local Window = Fluent:CreateWindow({
+	Title = "Alts",
+	SubTitle = "by VocÃª",
+	TabWidth = 160,
+	Size = UDim2.fromOffset(580, 460),
+	Acrylic = true,
+	Theme = "Dark",
+	MinimizeKey = Enum.KeyCode.LeftControl
+})
+
+-- Criar abas
+local Tabs = {
+	Settings = Window:AddTab({ Title = "Settings", Icon = "settings" }),
+	Gameplay = Window:AddTab({ Title = "Gameplay", Icon = "gamepad-2" }),
+    Modes = Window:AddTab({ Title = "Modes", Icon = "layout-dashboard" }),
+    SpawnsMod = Window:AddTab({ Title = "SpawnsMod", Icon = "layout-dashboard" }),
+    Levels = Window:AddTab({ Title = "Levels", Icon = "ðŸŽ¯"})
+
+}
+
+-- VariÃ¡veis de controle
+local Options = {}
+
+-- Gameplay - Replay Loop
+Tabs.Gameplay:AddToggle("AutoReplay", { Title = "Auto Replay" }):OnChanged(function(state)
+	Options.AutoReplay = state
+	task.spawn(function()
+		while Options.AutoReplay do
+			local args = {
+				{
+					Type = "Game",
+					Index = "Replay",
+					Mode = "Reward"
+				}
+			}
+			game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("GetFunction"):InvokeServer(unpack(args))
+			task.wait(10)
+		end
+	end)
+end)
+
+local trial1ModeToggle = false
+
+Options["trial1Mode"] = Tabs.Modes:AddToggle("trial1Mode", {
+    Title = "Trial 1 easy",
+    Default = false
+})
+
+Options["trial1Mode"]:OnChanged(function(v)
+    trial1ModeToggle = v
+end)
+
+task.spawn(function()
+    while true do
+        task.wait(2)
+        if trial1ModeToggle then
+            local args1 = {
+                {
+                    Type = "Lobby",
+                    Object = workspace:WaitForChild("Map"):WaitForChild("Islands"):WaitForChild("Snakeway"):WaitForChild("Raid Islands"):WaitForChild("Trial 1"):WaitForChild("raid area"):WaitForChild("DoorStuff"):WaitForChild("Interact"),
+                    Mode = "Pod"
+                }
+            }
+            game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("GetFunction"):InvokeServer(unpack(args1))
+
+            local args2 = {
+                {
+                    Start = true,
+                    Type = "Lobby",
+                    Update = true,
+                    Mode = "Pod"
+                }
+            }
+            game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("GetFunction"):InvokeServer(unpack(args2))
+        end
+    end
+end)
+local storyModeToggle = false
+
+Options["storyMode"] = Tabs.Modes:AddToggle("storyMode", {
+    Title = "Infinity",
+    Default = false
+})
+
+Options["storyMode"]:OnChanged(function(v)
+    storyModeToggle = v
+end)
+
+task.spawn(function()
+    while true do
+        task.wait(2)
+        if storyModeToggle then
+            local args1 = {
+                {
+                    Type = "Lobby",
+                    Object = workspace:WaitForChild("Map"):WaitForChild("Buildings"):WaitForChild("InfinitePods"):WaitForChild("StoryPod"):WaitForChild("Interact"),
+                    Mode = "Pod"
+                }
+            }
+            game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("GetFunction"):InvokeServer(unpack(args1))
+
+            local args2 = {
+                {
+                    Start = true,
+                    Type = "Lobby",
+                    Update = true,
+                    Mode = "Pod"
+                }
+            }
+            game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("GetFunction"):InvokeServer(unpack(args2))
+        end
+    end
+end)
+-- Variável de controle do toggle
+local spawnToggle = false
+
+-- Registro do toggle no sistema SpawnsMod
+Options["spawnToggle"] = Tabs.SpawnsMod:AddToggle("spawnToggle", {
+    Title = "Spawn Trial 1",
+    Default = false,
+    Callback = function(state)
+        spawnToggle = state
+
+        while spawnToggle do
+            -- Função para invocar unidades com posição
+            local function summon(unit, position)
+                local args = {
+                    "GameStuff",
+                    { "Summon", unit, position }
+                }
+                game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("SetEvent"):FireServer(unpack(args))
+            end
+
+            -- Início dos Spawns
+            summon("Teiuchi", CFrame.new(-49.245025634765625, -127.48651123046875, 93.8330078125))
+            summon("Killua4", CFrame.new(-3.5553932189941406, -127.92529296875, 113.02812194824219))
+            summon("Ulquiorra", CFrame.new(9.679889678955078, -125.4066162109375, 81.52201080322266))
+            summon("Ulquiorra", CFrame.new(10.17955207824707, -126.00424194335938, 76.3395004272461))
+            summon("Blackbeard", CFrame.new(-45.51862716674805, -127.92529296875, 106.83958435058594))
+            summon("Blackbeard", CFrame.new(-45.9672966003418, -127.92529296875, 165.73504638671875))
+            summon("Blackbeard", CFrame.new(-60.77241516113281, -127.92527770996094, 61.76482009887695))
+            summon("Zoro (Lobby)", CFrame.new(-119.12769317626953, -127.92529296875, 113.17671966552734))
+            summon("Zoro (Lobby)", CFrame.new(-119.08450317382812, -127.92315673828125, 106.72933197021484))
+            summon("Zoro (Lobby)", CFrame.new(-116.77709197998047, -127.92529296875, 106.14313507080078))
+            summon("Zoro (Lobby)", CFrame.new(-118.06122589111328, -127.69889831542969, 95.91267395019531))
+            summon("Zoro (Lobby)", CFrame.new(-117.57949829101562, -127.55572509765625, 89.76561737060547))
+            summon("Zoro (Lobby)", CFrame.new(-114.79000091552734, -127.92529296875, 95.30009460449219))
+            summon("Killua4", CFrame.new(-18.858013153076172, -127.92529296875, 102.7986068725586))
+            summon("Killua4", CFrame.new(-5.945066452026367, -127.5318603515625, 145.59568786621094))
+            summon("Zeke", CFrame.new(34.622100830078125, -127.53190612792969, 102.01335144042969))
+            summon("Zeke", CFrame.new(41.88444519042969, -127.20184326171875, 125.80696105957031))
+            summon("Zeke", CFrame.new(35.537654876708984, -126.4715576171875, 92.33821868896484))
+            -- Fim dos Spawns
+
+            task.wait(5)
+        end
+    end
+})
+-- Variável de controle do toggle
+local spawnToggle = false
+
+-- Registro do toggle no sistema Options (Aba "Ana")
+Options["spawnToggle"] = Tabs.Gameplay:AddToggle("spawnToggle", {
+	Title = "Fase 2",
+	Default = false,
+	Callback = function(state)
+		spawnToggle = state
+
+		while spawnToggle do
+			local function summon(unit, position)
+				local args = {
+					"GameStuff",
+					{ "Summon", unit, position }
+				}
+				game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("SetEvent"):FireServer(unpack(args))
+			end
+
+			-- Zeke
+			summon("Zeke", CFrame.new(105.70401000976562, 48.47740173339844, -51.646209716796875))
+			summon("Zeke", CFrame.new(88.0511703491211, 48.47781753540039, -48.58878707885742))
+			summon("Zeke", CFrame.new(114.80718994140625, 48.47740173339844, -18.928691864013672))
+
+			-- Killua4
+			summon("Killua4", CFrame.new(86.15982818603516, 48.60659408569336, -29.105449676513672))
+			summon("Killua4", CFrame.new(81.7841567993164, 48.47781753540039, -30.656538009643555))
+			summon("Killua4", CFrame.new(87.77765655517578, 48.47781753540039, -40.64191818237305))
+
+			-- Teiuchi
+			summon("Teiuchi", CFrame.new(51.36466979980469, 48.47781753540039, -1.4605255126953125))
+			summon("Teiuchi", CFrame.new(60.333351135253906, 48.47781753540039, -3.579265594482422))
+
+			-- Zoro (Lobby)
+			summon("Zoro (Lobby)", CFrame.new(159.42373657226562, 48.47781753540039, -102.05225372314453))
+
+			task.wait(5)
+		end
+	end
+})
+-- Variável de controle do toggle
+local spawnToggle = false
+
+-- Registro do toggle no sistema Options
+Options["spawnToggle"] = Tabs.Gameplay:AddToggle("spawnToggle", {
+	Title = "Fase 3",
+	Default = false,
+	Callback = function(state)
+		spawnToggle = state
+
+		while spawnToggle do
+			-- Função para invocar unidades com posição
+			local function summon(unit, position)
+				local args = {
+					"GameStuff",
+					{ "Summon", unit, position }
+				}
+				game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("SetEvent"):FireServer(unpack(args))
+			end
+
+			-- BASE 1 - Spawns definidos
+			summon("Zeke", CFrame.new(-229.23870849609375, 424.66864013671875, -128.6293182373047))
+			summon("Zeke", CFrame.new(-217.4267578125, 424.66864013671875, -131.162353515625))
+			summon("Zeke", CFrame.new(-247.8291473388672, 424.6287841796875, -198.4831085205078))
+			summon("Killua4", CFrame.new(-224.89352416992188, 424.6275634765625, -181.42523193359375))
+			summon("Killua4", CFrame.new(-237.68057250976562, 424.66864013671875, -129.69857788085938))
+			summon("Killua4", CFrame.new(-244.7956085205078, 424.66864013671875, -138.4037322998047))
+
+			task.wait(5)
+		end
+	end
+})
+-- Variável de controle do toggle
+local spawnToggle = false
+
+-- Registro do toggle no sistema Options
+Options["spawnToggle"] = Tabs.Gameplay:AddToggle("spawnToggle", {
+	Title = "Fase 4",
+	Default = false,
+	Callback = function(state)
+		spawnToggle = state
+
+		while spawnToggle do
+			-- Função para invocar unidades com posição
+			local function summon(unit, position)
+				local args = {
+					"GameStuff",
+					{ "Summon", unit, position }
+				}
+				game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("SetEvent"):FireServer(unpack(args))
+			end
+
+			-- Killua4 (3 posições)
+			summon("Killua4", CFrame.new(28.51180648803711, 55.65372085571289, 13.365375518798828))
+			summon("Killua4", CFrame.new(21.790008544921875, 55.58282470703125, -5.306480884552002))
+			summon("Killua4", CFrame.new(15.520030975341797, 55.58282470703125, 3.10402774810791))
+
+			-- Teiuchi (1 posição)
+			summon("Teiuchi", CFrame.new(-8.68067741394043, 55.58282470703125, 14.778240203857422))
+
+			-- Zeke (3 posições)
+			summon("Zeke", CFrame.new(-3.080301284790039, 55.58282470703125, 11.703508377075195))
+			summon("Zeke", CFrame.new(-15.352012634277344, 55.58282470703125, -46.37328338623047))
+			summon("Zeke", CFrame.new(-48.177459716796875, 55.778743743896484, -21.31171989440918))
+
+			-- Zoro (Lobby) (4 posições)
+			summon("Zoro (Lobby)", CFrame.new(169.6326904296875, 55.58282470703125, 51.4637451171875))
+			summon("Zoro (Lobby)", CFrame.new(169.01683044433594, 55.58282470703125, 45.491119384765625))
+			summon("Zoro (Lobby)", CFrame.new(166.433837890625, 55.58282470703125, 51.1022834777832))
+			summon("Zoro (Lobby)", CFrame.new(159.4927215576172, 55.58282470703125, 48.129371643066406))
+
+			-- Delay antes da próxima rodada de summons
+			task.wait(5)
+		end
+	end
+})
+-- Variável de controle do toggle
+local spawnToggle = false
+
+-- Registro do toggle no sistema Options
+Options["spawnToggle"] = Tabs.Gameplay:AddToggle("spawnToggle", {
+	Title = "Fase 5",
+	Default = false,
+	Callback = function(state)
+		spawnToggle = state
+
+		while spawnToggle do
+			-- Função para invocar unidades com posição
+			local function summon(unit, position)
+				local args = {
+					"GameStuff",
+					{ "Summon", unit, position }
+				}
+				game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("SetEvent"):FireServer(unpack(args))
+			end
+
+			-- KILLUA4
+			summon("Killua4", CFrame.new(15.273552894592285, 1.6127355098724365, -639.4290771484375))
+			summon("Killua4", CFrame.new(27.00620460510254, 3.0592806339263916, -624.990234375))
+			summon("Killua4", CFrame.new(29.9086856842041, 2.2252023220062256, -627.7566528320312))
+
+			-- ZEKE
+			summon("Zeke", CFrame.new(5.446781158447266, 1.526009202003479, -640.8681030273438))
+			summon("Zeke", CFrame.new(-15.679157257080078, 1.526009202003479, -647.6658325195312))
+			summon("Zeke", CFrame.new(50.8519287109375, 1.526009202003479, -638.3069458007812))
+
+			-- TEIUCHI
+			summon("Teiuchi", CFrame.new(58.86743927001953, 1.5949461460113525, -599.46435546875))
+
+			task.wait(5)
+		end
+	end
+})
+
+-- Zeke
+local autoUpgradeZeke = false
+Options["autoUpgradeZeke"] = Tabs.Levels:AddToggle("autoUpgradeZeke", {
+	Title = "Auto Upgrade Zeke",
+	Default = false
+})
+task.spawn(function()
+	while true do
+		if autoUpgradeZeke then
+			for _, unit in pairs(workspace:WaitForChild("UnitFolder"):GetChildren()) do
+				if unit.Name == "Zeke" then
+					local args = {
+						{ Type = "GameStuff" },
+						{ "Upgrade", unit }
+					}
+					game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("GetFunction"):InvokeServer(unpack(args))
+					task.wait(0.1)
+				end
+			end
+		end
+		task.wait(5)
+	end
+end)
+Options["autoUpgradeZeke"]:OnChanged(function(v)
+	autoUpgradeZeke = v
+end)
+
+-- Teiuchi
+local autoUpgradeTeiuchi = false
+Options["autoUpgradeTeiuchi"] = Tabs.Levels:AddToggle("autoUpgradeTeiuchi", {
+	Title = "Auto Upgrade Teiuchi",
+	Default = false
+})
+task.spawn(function()
+	while true do
+		if autoUpgradeTeiuchi then
+			for _, unit in pairs(workspace:WaitForChild("UnitFolder"):GetChildren()) do
+				if unit.Name == "Teiuchi" then
+					local args = {
+						{ Type = "GameStuff" },
+						{ "Upgrade", unit }
+					}
+					game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("GetFunction"):InvokeServer(unpack(args))
+					task.wait(0.1)
+				end
+			end
+		end
+		task.wait(4)
+	end
+end)
+Options["autoUpgradeTeiuchi"]:OnChanged(function(v)
+	autoUpgradeTeiuchi = v
+end)
+local autoUpgradeKillua = false
+
+Options["autoUpgradeKillua"] = Tabs.Levels:AddToggle("autoUpgradeKillua", {
+	Title = "Auto Upgrade Killua4",
+	Default = false
+})
+
+Options["autoUpgradeKillua"]:OnChanged(function(v)
+	autoUpgradeKillua = v
+end)
+
+task.spawn(function()
+	while true do
+		if autoUpgradeKillua then
+			for _, unit in pairs(workspace:WaitForChild("UnitFolder"):GetChildren()) do
+				if unit:IsA("Model") and unit.Name == "Killua4" then
+					local args = {
+						{ Type = "GameStuff" },
+						{ "Upgrade", unit }
+					}
+					game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("GetFunction"):InvokeServer(unpack(args))
+					task.wait(0.1)
+				end
+			end
+		end
+		task.wait(4)
+	end
+end)
+
+-- Anti-AFK
+local vu = game:GetService("VirtualUser")
+local player = game:GetService("Players").LocalPlayer
+local antiAFKConnection = nil
+
+Tabs.Settings:AddToggle("AntiAFK", { Title = "Anti-AFK" }):OnChanged(function(state)
+	Options.AntiAFK = state
+	if state and not antiAFKConnection then
+		antiAFKConnection = player.Idled:Connect(function()
+			vu:Button2Down(Vector2.new(0, 0), workspace.CurrentCamera.CFrame)
+			task.wait(1)
+			vu:Button2Up(Vector2.new(0, 0), workspace.CurrentCamera.CFrame)
+		end)
+	elseif not state and antiAFKConnection then
+		antiAFKConnection:Disconnect()
+		antiAFKConnection = nil
+	end
+end)
+
+-- Save Manager e Tema
+SaveManager:SetLibrary(Fluent)
+InterfaceManager:SetLibrary(Fluent)
+SaveManager:IgnoreThemeSettings()
+SaveManager:SetIgnoreIndexes({})
+InterfaceManager:SetFolder("MyHub")
+SaveManager:SetFolder("MyHub")
+SaveManager:BuildConfigSection(Tabs.Settings)
+InterfaceManager:ApplyDefaultTheme()
+SaveManager:LoadAutoloadConfig()
