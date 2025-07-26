@@ -397,7 +397,45 @@ task.spawn(function()
 		task.wait(4)
 	end
 end)
+-- Variável de controle do toggle
+local challengeF3Toggle = false
 
+-- Registro do toggle no sistema Options e na aba Modes
+Options["challengeF3Toggle"] = Tabs.Modes:AddToggle("challengeF3Toggle", {
+    Title = "Challenge F3 (Hard)",
+    Default = false,
+    Callback = function(value)
+        challengeF3Toggle = value
+
+        if value then
+            -- Etapa 1: Interagir com o Pod
+            local args1 = {
+                {
+                    Type = "Lobby",
+                    Object = workspace:WaitForChild("Map"):WaitForChild("Buildings"):WaitForChild("ChallengePods"):WaitForChild("Pod"):WaitForChild("Interact"),
+                    Mode = "Pod"
+                }
+            }
+            game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("GetFunction"):InvokeServer(unpack(args1))
+
+            task.wait(1)
+
+            -- Etapa 2: Selecionar Challenge3 (Hard)
+            local args2 = {
+                {
+                    Chapter = 1,
+                    Type = "Lobby",
+                    Name = "Challenge3",
+                    Difficulty = "Hard",
+                    Mode = "Pod",
+                    Friend = false,
+                    Update = true
+                }
+            }
+            game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("GetFunction"):InvokeServer(unpack(args2))
+        end
+    end
+})
 -- Anti-AFK
 local vu = game:GetService("VirtualUser")
 local player = game:GetService("Players").LocalPlayer
